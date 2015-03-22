@@ -1,0 +1,115 @@
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+{% extends '::base.html.twig' %}
+{% block title %}Créer une remarque_Anonote{% endblock %}
+
+{% block body %}
+<!-- main -->
+
+                      
+                        <!-- content -->
+
+                      
+                        <div class="row"> 
+                        <h4><u>La remarque</u></h4>   
+                        
+                            <form action="{{ path('Ajouter_Remarque')}}" method="POST" {{ form_enctype(form) }}>
+                            
+                           
+                            {{ form_row(form.titre) }}
+                          
+                            
+                            {{ form_row(form.contenu) }}
+                          
+                            
+                            {{ form_row(form.email) }}
+                           
+                    <br>
+                            
+                            <h4><u>Emails des votants</u></h4>
+<ul class="emails list-unstyled"  data-prototype="{{ form_widget(form.participants.vars.prototype.emailParticipant)|e }}">
+        
+	                        {% for email in form.emailParticipant %}
+
+	                           <li>{{ form_row(email.emailParticipant) }}</li>
+
+                               
+	                        {% endfor %}
+</ul>
+
+
+
+	                       {{ form_rest(form) }}
+	                       {# ... #}
+	                       </form>
+	                       
+                
+                     
+                      </div>              
+
+
+
+                    
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+// setup an "add a tag" link
+var $addTagLink = $('<a href="#" class="add_tag_link">Ajouter un votant</a>');
+var $newLinkLi = $('<li></li>').append($addTagLink);
+
+jQuery(document).ready(function() {
+    // Get the ul that holds the collection of tags
+   var $collectionHolder = $('ul.emails');
+    
+    // add the "add a tag" anchor and li to the tags ul
+    $collectionHolder.append($newLinkLi);
+    
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    $collectionHolder.data('index', $collectionHolder.find(':input').length);
+    
+    $addTagLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+        
+        // add a new tag form (see code block below)
+        addTagForm($collectionHolder, $newLinkLi);
+    });
+    
+    
+});
+
+function addTagForm($collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder.data('prototype');
+    
+    // get the new index
+    var index = $collectionHolder.data('index');
+    
+    // Replace '$$name$$' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+    
+    // increase the index with one for the next item
+    $collectionHolder.data('index', index + 1);
+    
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi = $('<li></li>').append(newForm);
+    
+    // also add a remove button, just for this example
+    $newFormLi.append('<a href="#" class="remove-tag">x</a>');
+    
+    $newLinkLi.before($newFormLi);
+    
+    // handle the removal, just for this example
+    $('.remove-tag').click(function(e) {
+        e.preventDefault();
+        
+        $(this).parent().remove();
+        
+        return false;
+    });
+}
+</script>  
+{% endblock %}

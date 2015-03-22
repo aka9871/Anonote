@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" lang="fr"/>
+        <meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>{% block title %}{% endblock %}</title>
+        {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css" />
+        <!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        
+        <div class="wrapper">
+	        <div class="box">
+		        <div class="row">
+          
+            <!-- sidebar -->
+            <div class="column col-sm-3" id="sidebar">
+                <a class="logo" href="{{path('Home_page')}}">An</a>
+                
+                <ul class="nav">
+                {% if app.user %}
+                 <li >Bienvenue {{ app.user.username }}</li>
+                 <hr>
+                 <li><a href="{{path('fos_user_profile_show')}}">Mon compte</a>
+                 <li><a href="{{path('dashboard')}}">Mes remarques</a>
+                {% else %}
+                 <li class="active"><a href="{{path('fos_user_security_login')}}">S'identifier</a></li>
+                 <li><a href="{{path('fos_user_registration_register')}}">Créer un compte</a>
+                {% endif %}
+
+                    <hr>
+                    <li><a href="#stories">À propos</a>
+                    </li>
+                </ul>
+                <ul class="nav hidden-xs" id="sidebar-footer">
+                    <li>
+                      <a href="http://www.bootply.com">Made with <i class="glyphicon glyphicon-heart-empty"></i> by AK</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /sidebar -->
+
+                    <div class="column col-sm-9" id="main">
+                <div class="padding">
+                    <div class="full col-sm-9">
+        
+        {% block body %}{% endblock %}
+        
+                                             
+
+                        
+                     
+                      
+                        <div class="row" id="footer">    
+                          <div class="col-sm-6">
+                            
+                          </div>
+                         
+                        </div>
+                      
+                      <hr>
+                      
+                      <h3 class="text-center">
+                      <a href="http://bootply.com/" target="ext">La critique constructive n'a jamais tué </a>
+                      </h3>
+                      
+                         
+                      <hr>
+                      <h2 class="text-center">
+                      <a href="http://bootply.com/" target="ext">100% Anonyme</a>
+                      </h2>
+                      <hr>
+                        <div class="row">
+                          <div class="text-center">
+                            <a href="#">Twitter</a> <small class="text-muted">|</small> <a href="#">Facebook</a> <small class="text-muted">|</small> <a href="#">Google+</a>
+                          </div>
+                        </div>
+                         <div class="text-center">
+                            <p>
+                            <a href="#" class="pull-right">©Copyright AKA47 Inc.</a>
+                            </p>
+                          </div>
+                      
+                    </div><!-- /col-9 -->
+                </div><!-- /padding -->
+            </div>
+            <!-- /main -->
+          
+        </div>
+    </div>
+</div>
+
+        
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+		{% block javascripts %}{% endblock %}
+    </body>
+</html>

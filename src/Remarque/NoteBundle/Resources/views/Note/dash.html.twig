@@ -1,0 +1,31 @@
+{% extends '::base.html.twig' %}
+{% block title %}Mon dashboard{% endblock %}
+
+{% block body %}
+
+<h3>Les remarques auqeulles je participe :</h3>
+<ul>
+  {% for remarque in mes_votes%}
+    <a href="{{ path('Voir_remarque', {'id': remarque.remarque.id}) }}"><li>{{ remarque.remarque.titre }} Mon vote : {{ remarque.vote }}  </li></a>
+  {% endfor %}
+</ul>
+<hr>
+<h3>Les remarques que j'ai crée </h3>
+<ul>
+  {% for remarque in remarque_envoyee %}
+    <a href="{{ path('Voir_remarque', {'id': remarque.id}) }}"><li>{{ remarque.titre }}   </li></a>
+  {% endfor %}
+</ul>
+<hr>
+<h3>Les remarques me concernant</h3>
+<ul>
+  {% for remarque in mes_remarques %}
+    <a href="{{ path('Voir_remarque', {'id': remarque.id}) }}"><li>{{ remarque.titre }}   </li></a>
+  {% endfor %}
+</ul>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

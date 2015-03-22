@@ -1,0 +1,26 @@
+Home_page:
+    path:     /
+    defaults: { _controller: RemarqueNoteBundle:Default:index }
+        
+remarque_note_ajouter:
+    path:     /add_note
+    defaults: { _controller: RemarqueNoteBundle:Default:ajouter }
+
+ 
+CreateNote:
+    path:     /create_note
+    defaults: { _controller: RemarqueNoteBundle:Default:AddNote }   
+    
+Mes_Remarques:
+    path:    /mes_remarques
+    defaults: { _controller: RemarqueNoteBundle:Default:MesRemarques }
+
+Ajouter_Remarque:
+    path:    /ajouter
+    defaults: { _controller: RemarqueNoteBundle:Remarque:Ajouter }
+Voir_remarque:
+    path:    /voir/{id}
+    defaults: { _controller: RemarqueNoteBundle:Remarque:voir }
+dashboard:
+    path:   /dashboard
+    defaults: { _controller: RemarqueNoteBundle:Remarque:dashboard }

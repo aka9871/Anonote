@@ -1,0 +1,40 @@
+
+
+{% extends '::base.html.twig' %}
+
+{% block title %}
+    Lecture d'une remarque - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+  <h2>
+    {# On vérifie qu'une image est bien associée à la remarque #}
+  
+
+    {{ remarque.titre }}
+  </h2>
+  <i>Par {{ remarque.auteur }}, le {{ remarque.date|date('d/m/Y') }}</i>
+
+  <div class="well">
+    {{ remarque.contenu }}
+  </div>
+
+ 
+    <div>
+      
+      <ul>
+       
+          <li>{{ nbr_participant }} participent à cette remarque</li>
+
+          <li>{{ pas_vote }} / {{nbr_participant}}  n'ont pas voté</li>
+          <li>{{ vote_positif }} / {{nbr_participant}}  ont approuvé cette remarque</li>
+          <li>{{ vote_negatif }} / {{nbr_participant}}  ne sont pas d'accord avec cette remarque</li>
+          <li>{{ signal }} / {{nbr_participant}} trouvent que c'est une remarque déplacé</li>
+        
+      </ul>
+    </div>
+
+
+ 
+{% endblock %}
