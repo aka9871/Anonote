@@ -48,4 +48,27 @@ class RemarqueParticipant
     return $this->participant;
   }
 
+
+    /**
+     * Set vote
+     *
+     * @param integer $vote
+     * @return RemarqueParticipant
+     */
+    public function setVote($vote)
+    {
+        $this->vote = $vote;
+
+        return $this;
+    }
+
+    /**
+     * Get vote
+     *
+     * @return integer 
+     */
+    public function getVote()
+    {
+        return $this->vote;
+    }
 }

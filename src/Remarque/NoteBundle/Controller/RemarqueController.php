@@ -186,7 +186,7 @@ class RemarqueController extends Controller
 
     $mes_votes=$em->getRepository('RemarqueNoteBundle:RemarqueParticipant')
                ->findByParticipant($moi_participant->getId());
-                dump($this->container, $mes_votes);
+                 dump($this->container, $mes_votes);
 
    return $this->render('RemarqueNoteBundle:Note:dash.html.twig', array(
             'remarque_envoyee' => $remarque_envoyee,
