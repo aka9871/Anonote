@@ -9,14 +9,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Remarque\NoteBundle\Entity\Participant;
 use Remarque\NoteBundle\Entity\RemarqueParticipant;
 use Remarque\NoteBundle\Entity\Remarque;
+
 use Remarque\NoteBundle\Form\RemarqueType;
 
 class RemarqueController extends Controller
 {
 
-  // …
+
 
   public function ajouterAction(Request $request)
   {
@@ -26,6 +28,21 @@ class RemarqueController extends Controller
 
     // Création de l'entité Remarque
     $remarque = new Remarque();
+
+
+        $participant1 = new Participant();
+        $participant1->setEmailParticipant('') ;
+        $remarque->getParticipants()->add($participant1);
+
+        $participant2 = new Participant();
+        $participant2->setEmailParticipant('') ;
+        $remarque->getParticipants()->add($participant2);
+
+        $participant3 = new Participant();
+        $participant3->setEmailParticipant('') ;
+        $remarque->getParticipants()->add($participant3);
+
+
     $form = $this->createForm(new RemarqueType(), $remarque);
 
     if ($request->isMethod('POST')) 
@@ -101,14 +118,20 @@ class RemarqueController extends Controller
           return $this->redirect($url);
         }
 
-     return $this->render('RemarqueNoteBundle:Note:new.html.twig', array(
+     return $this->render('RemarqueNoteBundle:Remarque:new.html.twig', array(
             'form' => $form->createView(),
         ));
 
 
     
   }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+
+////////////////////////////////////////////////// Voire une remarque ////////////////////////////////////////////
+ 
  public function voirAction($id)
   {
     // On récupère l'EntityManager
@@ -150,11 +173,100 @@ class RemarqueController extends Controller
       
      }
      
-     dump($this->container, $compteur+1);
+     // dump($this->container, $compteur+1);
 
 
     // Puis modifiez la ligne du render comme ceci, pour prendre en compte les articleParticipant :
-    return $this->render('RemarqueNoteBundle:Blog:voir.html.twig', array(
+    return $this->render('RemarqueNoteBundle:Remarque:voir.html.twig', array(
+      'remarque' => $remarque,
+      'nbr_participant' => $compteur+1,
+      'pas_vote' => $pas_vote,
+      'vote_positif' => $vote_positif,
+      'vote_negatif' => $vote_negatif,
+      'signal' => $signal,
+      //'liste_remarqueParticipant'  => $liste_remarqueParticipant, ====> tu nique tout si on envoie ca
+      
+    ));
+  }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////// Voire une remarque ////////////////////////////////////////////
+ 
+ public function voterAction($id,$vote=null)
+  {
+    // On récupère l'EntityManager
+    $em = $this->getDoctrine()
+               ->getManager();
+
+    // On récupère l'entité correspondant à l'id $id
+    $remarque = $em->getRepository('RemarqueNoteBundle:Remarque')
+                  ->find($id);
+
+    if ($remarque === null) {
+      throw $this->createNotFoundException('Remarque[id='.$id.'] inexistant.');
+    }
+ 
+ if($vote)
+ { 
+    dump($this->container, $vote);
+
+    $moi_participant= $em->getRepository('RemarqueNoteBundle:Participant')
+                  ->findOneByemailParticipant($this->getUser()->getEmail());
+    $participant_id_tmp= $moi_participant->getId();
+
+    $em = $this
+    ->getDoctrine()
+    ->getManager()
+    ->getRepository('RemarqueNoteBundle:RemarqueParticipant');
+    
+   $trouve=$em->myFindOne($id,$participant_id_tmp);
+
+   $em = $this->getDoctrine()
+               ->getManager();
+   $tmp= new RemarqueParticipant();
+   $tmp=$trouve[0];
+   $tmp->setVote($vote);
+   $em->persist($tmp);
+   $em->flush();
+   
+   return $this->redirect($this->generateUrl('Voir_remarque',array('id' => $id) ));
+   
+
+}
+else{
+
+
+    // On récupère les articleParticipant pour la remarque $remarque
+    $liste_remarqueParticipant = $em->getRepository('RemarqueNoteBundle:RemarqueParticipant')
+                            ->findByRemarque($remarque->getId());
+     
+     // ICI EST LE COEUR DE L'APPLICATION, LE CONCEPT DE L'ANONYMAT 
+     
+     $pas_vote=$vote_positif=$vote_negatif=$signal=0;
+
+     foreach ($liste_remarqueParticipant as $compteur=> $Participant) {
+      
+      $levote=$Participant->getVote();
+      if($levote==0)
+      {
+      $pas_vote++;
+      }
+      elseif ($levote==1) {
+          $vote_positif++; 
+         }  
+         elseif ($levote==2) {
+           $vote_negatif++;
+         }
+             else{
+              $signal++;
+             }
+      
+     }
+
+    // Puis modifiez la ligne du render comme ceci, pour prendre en compte les articleParticipant :
+    return $this->render('RemarqueNoteBundle:Remarque:voter.html.twig', array(
       'remarque' => $remarque,
       'nbr_participant' => $compteur+1,
       'pas_vote' => $pas_vote,
@@ -164,8 +276,15 @@ class RemarqueController extends Controller
       //'liste_remarqueParticipant'  => $liste_remarqueParticipant,
       // … et évidemment les autres variables que vous pouvez avoir
     ));
-  }
 
+    }
+  }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+////////////////////////////////////////////////// Le dashboard //////////////////////////////////////////////////  
   public function dashboardAction()
   {
 
@@ -186,9 +305,9 @@ class RemarqueController extends Controller
 
     $mes_votes=$em->getRepository('RemarqueNoteBundle:RemarqueParticipant')
                ->findByParticipant($moi_participant->getId());
-                 dump($this->container, $mes_votes);
+                 
 
-   return $this->render('RemarqueNoteBundle:Note:dash.html.twig', array(
+   return $this->render('RemarqueNoteBundle:Remarque:dash.html.twig', array(
             'remarque_envoyee' => $remarque_envoyee,
             'mes_remarques' => $mes_remarques,
             'mes_votes' => $mes_votes,

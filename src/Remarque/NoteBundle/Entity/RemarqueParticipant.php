@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Remarque\NoteBundle\Entity\RemarqueParticipantRepository")
  */
 class RemarqueParticipant
 {

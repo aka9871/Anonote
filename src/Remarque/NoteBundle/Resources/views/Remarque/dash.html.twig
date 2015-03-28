@@ -6,7 +6,13 @@
 <h3>Les remarques auqeulles je participe :</h3>
 <ul>
   {% for remarque in mes_votes%}
-    <a href="{{ path('Voir_remarque', {'id': remarque.remarque.id}) }}"><li>{{ remarque.remarque.titre }} Mon vote : {{ remarque.vote }}  </li></a>
+    {% if not remarque.vote %}
+    <a href="{{ path('Voter_remarque', {'id': remarque.remarque.id}) }}"><li>{{ remarque.remarque.titre }} ----->  il faut voter </li></a>
+    {% else %}
+    <a href="{{ path('Voir_remarque', {'id': remarque.remarque.id}) }}"><li>{{ remarque.remarque.titre }} -----> Vous avez déjâ voté : {{ remarque.vote }} (il faut cacher ça par la suite)  </li></a>
+    {% endif %}
+
+    
   {% endfor %}
 </ul>
 <hr>

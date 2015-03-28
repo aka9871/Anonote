@@ -18,9 +18,15 @@ Mes_Remarques:
 Ajouter_Remarque:
     path:    /ajouter
     defaults: { _controller: RemarqueNoteBundle:Remarque:Ajouter }
+
 Voir_remarque:
     path:    /voir/{id}
     defaults: { _controller: RemarqueNoteBundle:Remarque:voir }
+
+Voter_remarque:
+    path:    /voter/{id}/{vote}
+    defaults: { _controller: RemarqueNoteBundle:Remarque:voter, vote : null }
+
 dashboard:
     path:   /dashboard
     defaults: { _controller: RemarqueNoteBundle:Remarque:dashboard }

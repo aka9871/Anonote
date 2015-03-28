@@ -35,6 +35,25 @@
       </ul>
     </div>
 
+    <div>
 
+    {% if app.user.email  == remarque.auteur  %}
+     {% if pas_vote <= ( nbr_participant / 2 ) %}
+
+       <div  class="btn-group" role="group">
+       <a href=""  type="button" class="btn btn-primary">Envoyer la remarque maintenant</a>
+      </div>
+
+     {% else %}
+      <div  class="btn-group" role="group">
+       <a href=""  type="button" class="btn btn-primary disabled">Envoyer la remarque maintenant</a>
+      </div>
+    {% endif %}
+     
+     
+
+    {% endif %}
+
+    </div>
  
 {% endblock %}
